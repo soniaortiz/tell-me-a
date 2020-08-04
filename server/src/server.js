@@ -16,7 +16,7 @@ app.use(errorHandler())
 app.set('port', 8000)
 
 app.get('/', (req, res, next)=>{
-    res.sendFile(__dirname, '../../public/index.html')
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
 })
 
 app.get('/joke', (req, res, next)=>{
@@ -26,7 +26,6 @@ app.get('/joke', (req, res, next)=>{
             data +=chunk
         })
         response.on('end', ()=>{
-            console.log(data)
             res.send(JSON.parse(data))
 
         })
@@ -34,7 +33,7 @@ app.get('/joke', (req, res, next)=>{
 })
 
 app.get('*', (req, res, next)=>{
-    res.sendFile(__dirname, '../../public/index.html')
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
 })
 
 
