@@ -1,5 +1,8 @@
 import React from 'react'
-import Container from '@material-ui/core/Container';
+import Container from '@material-ui/core/Container'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 const request = require('axios')
 
 export class Jokes extends React.Component {
@@ -10,47 +13,52 @@ export class Jokes extends React.Component {
         }
     }
 
-    componentDidMount() {
-        console.log('DID MOUNT')
+    fetchJokes() {
         request.get('/joke')
             .then((response) => {
-                console.log(response, '???')
                 this.setState({
                     jokesList: response.data
                 })
             })
+            .catch((e) => {
+                console.log(e)
+            })
     }
 
     renderList() {
-        // console.log('>>>', this.state.jokesList)
         let list = this.state.jokesList.length ?
             this.state.jokesList.map((joke) => {
                 return (
-                    <li key={joke.id + joke.type}>
-                        <p>
-                            {joke.setup}
-                        </p>
-                        <p>
-                            {joke.punchline}
-                        </p>
-                    </li>
+                    <ListItem key={joke.id + joke.type}>
+                        <ListItemText
+                            primary={joke.setup}
+                            secondary={joke.punchline}
+                        />
+                    </ListItem>
                 )
             })
             : []
 
         return (
-            <ul>
+            <List>
                 {list}
-            </ul>
+            </List>
         )
 
+    }
+
+    componentDidMount() {
+        this.fetchJokes()
     }
 
     render() {
         return (
             <Container fixed>
                 {
-                this.state.jokesList.length ? this.renderList() : null}
+                    this.state.jokesList
+                    && this.state.jokesList.length
+                    && this.renderList()
+                }
             </Container>
         )
     }
